@@ -19,11 +19,14 @@ public class Encrypt {
           };
 
         String key = FileHandler.readTextFile("key").replaceAll(" ", "");
+        int klartext = 0b0001001010001111;
 
         int [] roundKeys = calculateRoundKeys(key,r);
-        for (int roundKey : roundKeys) {
-            System.out.println(Integer.toBinaryString(roundKey));
-        }
+        int result = encrypt(roundKeys, klartext, sBox, bitPermutation);
+        System.out.println(Integer.toBinaryString(result));
+       /*         for (int roundKey : roundKeys) {
+                    System.out.println(Integer.toBinaryString(roundKey));
+                }*/
     }
 
     public static int [] calculateRoundKeys(String text, int rounds) {
@@ -39,18 +42,18 @@ public class Encrypt {
         return result;
     }
 
-    public static int encrypt(int [] roundKeys, int klartext) {
+    public static int encrypt(int [] roundKeys, int klartext, char [] sBox, int [] bitPermutation) {
         int result = klartext;
         for(int i = 0; i < roundKeys.length; i++) {
             if(i == 0){ // initial Weissschritt
                 result = result ^ roundKeys[i];
             }
-            if  (i==roundKeys.length-1){ //last round
-                result = wordSubstitution(result);
+            else if  (i==roundKeys.length-1){ //last round
+                result = wordSubstitution(result, sBox);
                 result = result ^ roundKeys[i];
             } else {// other rounds
-                result = wordSubstitution(result);
-                result = permutation(result);
+                result = wordSubstitution(result, sBox);
+                result = permutation(result, bitPermutation);
                 result = result ^ roundKeys[i];
             }
         }
@@ -58,14 +61,30 @@ public class Encrypt {
         return result;
     }
 
-    private static int permutation(int bitmuster) {
+    private static int permutation(int bitmuster, int[] bitPermutation) {
         int result = 0;
+
+        // Loop through all 16 bits
+        for (int i = 0; i < 16; i++) {
+            int bit = (bitmuster >> i) & 1; // Extract bit at position i
+
+            if (bit == 1) {
+                result |= (1 << bitPermutation[i]); // Move bit to new position
+            }
+        }
 
         return result;
     }
 
-    private static int wordSubstitution(int bitmuster) {
+
+    private static int wordSubstitution(int bitmuster, char [] sBox) {
         int result = 0;
+        for (int i = 0; i < 4; i++) {
+            int nibble = (bitmuster >> (i * 4)) & 0xF; // Extract 4-bit segment
+            int substituted = Character.digit(sBox[nibble], 16); // S-Box lookup
+
+            result |= (substituted << (i * 4)); // Place back in the correct position
+        }
 
 
         return result;
