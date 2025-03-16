@@ -20,10 +20,14 @@ public class Encrypt {
 
         String key = FileHandler.readTextFile("key").replaceAll(" ", "");
         int klartext = 0b0001001010001111;
+        int chiffre =  0b1010111010110100;
 
         int [] roundKeys = calculateRoundKeys(key,r);
         int result = encrypt(roundKeys, klartext, sBox, bitPermutation);
-        System.out.println(Integer.toBinaryString(result));
+        System.out.println("Encryption of " + Integer.toBinaryString(klartext) + ": " + Integer.toBinaryString(result));
+        result = decrypt(roundKeys, chiffre, sBox, bitPermutation);
+        System.out.println("Decryption of " + Integer.toBinaryString(chiffre) +  ": " +Integer.toBinaryString(result));
+
        /*         for (int roundKey : roundKeys) {
                     System.out.println(Integer.toBinaryString(roundKey));
                 }*/
@@ -60,6 +64,43 @@ public class Encrypt {
 
         return result;
     }
+
+    public static int decrypt(int [] roundKeys, int chiffre, char [] sBox, int [] bitPermutation) {
+        char [] inverseSBox = inverseSBox(sBox);
+        int [] newRoundKeys = calRoundKeys(roundKeys, bitPermutation);
+        return encrypt(newRoundKeys, chiffre, inverseSBox,bitPermutation);
+    }
+
+    private static int[] calRoundKeys(int[] roundKeys, int [] bitPermutation) {
+        int[] result = new int[roundKeys.length];
+        for (int i = 0; i < roundKeys.length; i++) {
+            if (i == 0) {
+                result[i] = roundKeys[roundKeys.length-1];
+            }
+            else if (i == roundKeys.length-1){
+                result[i] = roundKeys[0];
+            }
+            else {
+                result[i] = permutation(roundKeys[i], bitPermutation);
+            }
+        }
+        return result;
+    }
+
+    private static char[] inverseSBox(char[] sBox) {
+        char[] inverse = new char[sBox.length];
+
+        for (int i = 0; i < sBox.length; i++) {
+            int value = Character.digit(sBox[i], 16); // Convert hex char ('E', '4', etc.) to integer (0-15)
+            inverse[value] = Character.forDigit(i, 16); // Store original index at the correct position
+        }
+
+        return inverse;
+    }
+
+
+
+
 
     private static int permutation(int bitmuster, int[] bitPermutation) {
         int result = 0;
