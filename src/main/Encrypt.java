@@ -48,37 +48,51 @@ public class Encrypt {
         bitPermutation.put(14, 11);
         bitPermutation.put(15, 15);
 
-        String [] roundKeys = calculateRoundKeys(key,r);
-        for (String roundKey : roundKeys) {
-            System.out.println(roundKey);
+        int [] roundKeys = calculateRoundKeys(key,r);
+        for (int roundKey : roundKeys) {
+            System.out.println(Integer.toBinaryString(roundKey));
         }
     }
 
-    public static String [] calculateRoundKeys(String text, int rounds) {
-        String [] result = new String[rounds+1];
+    public static int [] calculateRoundKeys(String text, int rounds) {
+        String [] subString = new String[rounds+1];
+        int [ ] result = new int[rounds+1];
         int length = 16;
         int start = 0;
         for (int i = 0; i <= rounds; i++) {
              start = 4*i;
-             result[i] = text.substring(start, start+length);
+             subString[i] = text.substring(start, start+length);
+             result[i] = Integer.parseInt(subString[i],2);
         }
         return result;
     }
 
-    public static String encrypt(Map<Character, Character> sBox, String [] roundKeys, Map <Integer, Integer> bitPermutation, String klartext) {
-        String result = "";
+    public static int encrypt(Map<Character, Character> sBox, int [] roundKeys, Map <Integer, Integer> bitPermutation, int klartext) {
+        int result = klartext;
         for(int i = 0; i < roundKeys.length; i++) {
-            if(i == 0){ // initialer Weissschritt
-                //result = klartext ^ roundKeys[i];
-
+            if(i == 0){ // initial Weissschritt
+                result = result ^ roundKeys[i];
             }
-            if  (i==roundKeys.length-1){
-
-            } else {
-
+            if  (i==roundKeys.length-1){ //last round
+                result = wordSubstitution(result);
+                result = result ^ roundKeys[i];
+            } else {// other rounds
+                result = wordSubstitution(result);
+                result = permutation(result);
+                result = result ^ roundKeys[i];
             }
         }
 
+        return result;
+    }
+
+    private static int permutation(int bitmuster) {
+        int result = 0;
+        return result;
+    }
+
+    private static int wordSubstitution(int bitmuster) {
+        int result = 0;
         return result;
     }
 
