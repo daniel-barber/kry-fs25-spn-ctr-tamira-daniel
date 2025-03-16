@@ -3,6 +3,7 @@ package src.main;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Encrypt {
     public static void main(String[] args) {
         int r = 4; // Anzahl Runden
@@ -64,8 +65,19 @@ public class Encrypt {
         return result;
     }
 
-    public static String encrypt(Map<Character, Character> sBox, String [] roundKeys, Map <Integer, Integer> bitPermutation) {
+    public static String encrypt(Map<Character, Character> sBox, String [] roundKeys, Map <Integer, Integer> bitPermutation, String klartext) {
         String result = "";
+        for(int i = 0; i < roundKeys.length; i++) {
+            if(i == 0){ // initialer Weissschritt
+                //result = klartext ^ roundKeys[i];
+
+            }
+            if  (i==roundKeys.length-1){
+
+            } else {
+
+            }
+        }
 
         return result;
     }
