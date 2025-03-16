@@ -11,42 +11,14 @@ public class Encrypt {
         int m = 4; // Anzahl S-Boy pro Runde
         int s = 32; // Schlüssellänge
 
-        String key = FileHandler.readTextFile("key").replaceAll(" ", "");
-        Map <Character, Character> box = new HashMap<>();
-        box.put('0','E');
-        box.put('1','4');
-        box.put('2','D');
-        box.put('3','1');
-        box.put('4','2');
-        box.put('5','F');
-        box.put('6','B');
-        box.put('7','8');
-        box.put('8','3');
-        box.put('9','A');
-        box.put('A','6');
-        box.put('B','C');
-        box.put('C','5');
-        box.put('D','9');
-        box.put('E','0');
-        box.put('F','7');
+          final char [] sBox = {
+                'E', '4', 'D', '1', '2', 'F', 'B', '8', '3','A', '6', 'C','5', '9', '0','7'
+        };
+          final int [] bitPermutation = {
+                0,4,8,12,1,5,9,13,2,6,10,14,3,7,11,15
+          };
 
-        Map <Integer, Integer> bitPermutation = new HashMap<>();
-        bitPermutation.put(0, 0);
-        bitPermutation.put(1, 4);
-        bitPermutation.put(2, 8);
-        bitPermutation.put(3, 12);
-        bitPermutation.put(4, 1);
-        bitPermutation.put(5, 5);
-        bitPermutation.put(6, 9);
-        bitPermutation.put(7, 13);
-        bitPermutation.put(8, 2);
-        bitPermutation.put(9, 6);
-        bitPermutation.put(10, 10);
-        bitPermutation.put(11, 14);
-        bitPermutation.put(12, 3);
-        bitPermutation.put(13, 7);
-        bitPermutation.put(14, 11);
-        bitPermutation.put(15, 15);
+        String key = FileHandler.readTextFile("key").replaceAll(" ", "");
 
         int [] roundKeys = calculateRoundKeys(key,r);
         for (int roundKey : roundKeys) {
@@ -67,7 +39,7 @@ public class Encrypt {
         return result;
     }
 
-    public static int encrypt(Map<Character, Character> sBox, int [] roundKeys, Map <Integer, Integer> bitPermutation, int klartext) {
+    public static int encrypt(int [] roundKeys, int klartext) {
         int result = klartext;
         for(int i = 0; i < roundKeys.length; i++) {
             if(i == 0){ // initial Weissschritt
@@ -88,11 +60,14 @@ public class Encrypt {
 
     private static int permutation(int bitmuster) {
         int result = 0;
+
         return result;
     }
 
     private static int wordSubstitution(int bitmuster) {
         int result = 0;
+
+
         return result;
     }
 
