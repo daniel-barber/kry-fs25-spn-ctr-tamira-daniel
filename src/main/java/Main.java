@@ -8,13 +8,15 @@ public class Main {
         int x = Integer.parseInt("0001001010001111", 2);
         int expectedY = Integer.parseInt("1010111010110100", 2);
         int y = spn.encrypt(x);
+        int decryptedY = spn.decrypt(y);
 
         System.out.println("x                       : " + SPN.formatBinary(x));
         System.out.println("y (expected ciphertext) : " + SPN.formatBinary(expectedY));
         System.out.println("actual ciphertext       : " + SPN.formatBinary(y));
+        System.out.println("decrypted ciphertext :    " + SPN.formatBinary(decryptedY));
 
-        if (y == expectedY) {
-            System.out.println("Test PASSED: Encryption matches the expected ciphertext.");
+        if (y == expectedY && x == decryptedY) {
+            System.out.println("Test PASSED: Encryption matches the expected ciphertext and the decryption matches the initial plaintext.");
         } else {
             System.out.println("Test FAILED: Encryption does not match the expected ciphertext.");
         }
