@@ -1,10 +1,10 @@
-package src.main;
+package main.java;
 
 public class Main {
     public static void main(String[] args) {
 
         // test the SPN
-        var spn = new SPN("00010001001010001000110000000000", 5);
+        var spn = new main.java.SPN("00010001001010001000110000000000", 5);
         int x = Integer.parseInt("0001001010001111", 2);
         int expectedY = Integer.parseInt("1010111010110100", 2);
         int y = spn.encrypt(x);

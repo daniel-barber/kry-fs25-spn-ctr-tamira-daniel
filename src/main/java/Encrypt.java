@@ -1,7 +1,4 @@
-package src.main;
-
-import java.util.HashMap;
-import java.util.Map;
+package main.java;
 
 
 public class Encrypt {
