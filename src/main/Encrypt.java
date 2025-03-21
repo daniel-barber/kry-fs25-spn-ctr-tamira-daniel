@@ -131,5 +131,39 @@ public class Encrypt {
         return result;
     }
 
+    private static String convertToPaddedBitString(String text) {
+        StringBuilder bitString = new StringBuilder();
+
+        for (char c : text.toCharArray()) {
+            String binary = String.format("%8s", Integer.toBinaryString(c)).replace(' ', '0');
+            bitString.append(binary);
+        }
+
+        bitString.append('1'); // Padding-Markierung
+
+        int paddingNeeded = (16 - (bitString.length() % 16)) % 16;
+        for (int i = 0; i < paddingNeeded; i++) {
+            bitString.append('0');
+        }
+
+        return bitString.toString();
+    }
+
+    private static String convertFromPaddedBitString(String bitString) {
+        int lastOneIndex = bitString.lastIndexOf('1');
+        String trimmedBitString = bitString.substring(0, lastOneIndex);
+
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < trimmedBitString.length(); i += 8) {
+            String byteString = trimmedBitString.substring(i, Math.min(i + 8, trimmedBitString.length()));
+            char c = (char) Integer.parseInt(byteString, 2);
+            text.append(c);
+        }
+
+        return text.toString();
+    }
+
+
+
 
 }
