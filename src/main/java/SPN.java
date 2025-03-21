@@ -71,41 +71,41 @@ public class SPN {
 
     // encrypt plaintext
     public int encrypt(int plaintext){
-        int state = plaintext;
+        int result = plaintext;
 
         // round 1 -> initialer Weissschritt -> XOR mit ersten Rundenschlüssel
-        state ^= roundKeys[0];
+        result ^= roundKeys[0];
 
         // round 1 to 1 before last
         for (int round = 1; round < rounds - 1; round++){
-            state = applySBox(state, false);
-            state = applyPermutation(state);
-            state ^= roundKeys[round];
+            result = applySBox(result, false);
+            result = applyPermutation(result);
+            result ^= roundKeys[round];
         }
 
         // final round
-        state = applySBox(state, false);
-        state ^= roundKeys[rounds - 1];
-        return state;
+        result = applySBox(result, false);
+        result ^= roundKeys[rounds - 1];
+        return result;
     }
 
     public int decrypt (int ciphertext){
-        int state = ciphertext;
+        int result = ciphertext;
 
         // reverse final round
-        state ^= roundKeys[rounds - 1];
-        state = applySBox(state, true);
+        result ^= roundKeys[rounds - 1];
+        result = applySBox(result, true);
 
         // reverse round 1 to 1 before last
         for (int round = rounds - 2; round >= 1; round--){
-            state ^= roundKeys[round];
-            state = applyPermutation(state);
-            state = applySBox(state, true);
+            result ^= roundKeys[round];
+            result = applyPermutation(result);
+            result = applySBox(result, true);
         }
 
         // reverse round 1
-        state ^= roundKeys[0];
-        return state;
+        result ^= roundKeys[0];
+        return result;
     }
 
     // helper function for formatting
